@@ -39,9 +39,11 @@ public class ReviewRepository {
         String remark = review.getRemark();
         this.jdbcTemplate.update(sql, rating, remark, propertyId);
 
+        review.setPropertyId(propertyId);
+
         String selectReviewId = "SELECT TOP 1 id FROM review ORDER BY id DESC";
         int reviewId = this.jdbcTemplate.queryForObject(selectReviewId, Integer.class);
         review.setId(reviewId);
-        review.setPropertyId(propertyId);
+        
     }
 }

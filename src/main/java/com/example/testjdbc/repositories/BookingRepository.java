@@ -38,32 +38,16 @@ public class BookingRepository {
       int totalPrice = booking.getTotalPrice();
       this.jdbcTemplate.update(sql, totalPrice, id);
 
-      String selectBookingId = "SELECT id FROM booking WHERE id = ?";
-      int bookingId = this.jdbcTemplate.queryForObject(selectBookingId, Integer.class, id);
-      booking.setId(bookingId);
-
-      String selectCheckInDate = "SELECT checkInDate FROM booking WHERE id = ?";
-      String checkInDate = this.jdbcTemplate.queryForObject(selectCheckInDate, String.class, id);
-      booking.setCheckInDate(checkInDate);
-
-      String selectCheckOutDate = "SELECT checkOutDate FROM booking WHERE id = ?";
-      String checkOutDate = this.jdbcTemplate.queryForObject(selectCheckOutDate, String.class, id);
-      booking.setCheckOutDate(checkOutDate);
-
-      String selectRemarks = "SELECT remarks FROM booking WHERE id = ?";
-      String remark = this.jdbcTemplate.queryForObject(selectRemarks, String.class, id);
-      booking.setRemarks(remark);
-
-      String selectGuestNum = "SELECT numGuest FROM booking WHERE id = ?";
-      int guestNum = this.jdbcTemplate.queryForObject(selectGuestNum, Integer.class, id);
-      booking.setNumGuest(guestNum);
-
-      String selectUserId = "SELECT user_id FROM booking WHERE id = ?";
-      int userId = this.jdbcTemplate.queryForObject(selectUserId, Integer.class, id);
-      booking.setUserId(userId);
-
-      String selectPropertyId = "SELECT property_id FROM booking WHERE id = ?";
-      int propertyId = this.jdbcTemplate.queryForObject(selectPropertyId, Integer.class, id);
-      booking.setUserId(propertyId);
+      RowMapper<Booking> rowMapper = new BookingRowMapper();
+      String selectBookingInfo = "SELECT * FROM booking WHERE id = ?";
+      Booking bookingInfo = this.jdbcTemplate.queryForObject(selectBookingInfo, rowMapper, id);
+      booking.setId(bookingInfo.getId());
+      booking.setCheckInDate(bookingInfo.getCheckInDate());
+      booking.setCheckOutDate(bookingInfo.getCheckOutDate());
+      booking.setRemarks(bookingInfo.getRemarks());
+      booking.setNumGuest(bookingInfo.getNumGuest());
+      booking.setUserId(bookingInfo.getUserId());
+      booking.setPropertyId(bookingInfo.getPropertyId());
+      
     }
 }
